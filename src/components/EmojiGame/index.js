@@ -22,7 +22,6 @@ import WinOrLoseCard from '../WinOrLoseCard/index'
 import './index.css'
 
 const scoreDetailsObject = {scoreValue: 0, topScoreValue: 0}
-const clickedEmojisList = []
 
 class EmojiGame extends Component {
   constructor(props) {
@@ -31,15 +30,36 @@ class EmojiGame extends Component {
     this.state = {
       emojisListDetails: emojisList,
       scoreDetails: scoreDetailsObject,
+      clickedEmojisListArray: [],
       isRepeated: false,
     }
   }
 
+  // console.log(NaN === NaN); // false
+  // console.log(isNaN(NaN));  // true
+
   emojiClickedAction = idNum => {
-    if (clickedEmojisList.includes(idNum)) {
-      this.setState({isRepeated: true})
+    const {clickedEmojisListArray, scoreDetails} = this.state
+    const {scoreValue, topScoreValue} = scoreDetails
+    if (clickedEmojisListArray.includes(idNum)) {
+      const renderScoreValue = () => {
+        console.log(topScoreValue, scoreValue)
+        if (scoreValue >= topScoreValue) {
+          return scoreValue
+        }
+        return topScoreValue
+      }
+
+      this.setState(prevState => ({
+        isRepeated: true,
+        scoreDetails: {
+          ...prevState.scoreDetails,
+          topScoreValue: renderScoreValue(),
+          scoreValue: 0,
+        },
+      }))
     } else {
-      clickedEmojisList.push(idNum)
+      clickedEmojisListArray.push(idNum)
       const shuffledEmojisList = () => {
         const {emojisList} = this.props
         return emojisList.sort(() => Math.random() - 0.5)
@@ -53,6 +73,10 @@ class EmojiGame extends Component {
         },
       }))
     }
+  }
+
+  playBtnEl = () => {
+    this.setState({isRepeated: false, clickedEmojisListArray: []})
   }
 
   render() {
@@ -75,12 +99,12 @@ class EmojiGame extends Component {
       if (!isRepeated) {
         return null
       }
-      return <WinOrLoseCard />
+      return <WinOrLoseCard playBtnEl={this.playBtnEl} />
     }
 
     return (
       <div className="bg">
-        <NavBar scoreDetails={scoreDetails} />
+        <NavBar scoreDetails={scoreDetails} isRepeated={isRepeated} />
         <div className="listContainer">
           <ul className="ulContainer">
             {renderEmojisUi()}

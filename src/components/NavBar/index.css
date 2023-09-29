@@ -29,3 +29,7 @@
   font-weight: bold;
   margin-right: 10px;
 }
+
+.displayScoreDetails {
+  display: none;
+}

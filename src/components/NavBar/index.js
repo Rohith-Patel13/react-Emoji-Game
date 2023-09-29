@@ -5,8 +5,10 @@ import './index.css'
 
 class NavBar extends Component {
   render() {
-    const {scoreDetails} = this.props
+    const {scoreDetails, isRepeated} = this.props
     const {scoreValue, topScoreValue} = scoreDetails
+    // console.log(isRepeated)
+    const displayScore = isRepeated ? 'displayScoreDetails' : ''
     return (
       <nav className="navContainer">
         <div className="emojiLogoContainer">
@@ -17,7 +19,7 @@ class NavBar extends Component {
           />
           <p className="emojiPara">Emoji Game</p>
         </div>
-        <div className="scoreContainer">
+        <div className={`scoreContainer ${displayScore}`}>
           <p className="scorePara">Score: {scoreValue}</p>
           <p className="scorePara">Top Score: {topScoreValue}</p>
         </div>

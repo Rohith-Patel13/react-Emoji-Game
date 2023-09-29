@@ -17,7 +17,7 @@ import NavBar from '../NavBar/index'
 
 import EmojiCard from '../EmojiCard/index'
 
-// import WinOrLoseCard from '../WinOrLoseCard/index'
+import WinOrLoseCard from '../WinOrLoseCard/index'
 
 import './index.css'
 
@@ -31,41 +31,60 @@ class EmojiGame extends Component {
     this.state = {
       emojisListDetails: emojisList,
       scoreDetails: scoreDetailsObject,
+      isRepeated: false,
     }
   }
 
   emojiClickedAction = idNum => {
-    clickedEmojisList.push(idNum)
+    if (clickedEmojisList.includes(idNum)) {
+      this.setState({isRepeated: true})
+    } else {
+      clickedEmojisList.push(idNum)
+      const shuffledEmojisList = () => {
+        const {emojisList} = this.props
+        return emojisList.sort(() => Math.random() - 0.5)
+      }
 
-    const shuffledEmojisList = () => {
-      const {emojisList} = this.props
-      return emojisList.sort(() => Math.random() - 0.5)
+      this.setState(prevState => ({
+        emojisListDetails: shuffledEmojisList(),
+        scoreDetails: {
+          ...prevState.scoreDetails,
+          scoreValue: prevState.scoreDetails.scoreValue + 1,
+        },
+      }))
     }
-
-    this.setState(prevState => ({
-      emojisListDetails: shuffledEmojisList(),
-      scoreDetails: {
-        ...prevState.scoreDetails,
-        scoreValue: prevState.scoreDetails.scoreValue + 1,
-      },
-    }))
   }
 
   render() {
-    const {emojisListDetails, scoreDetails} = this.state
+    const {emojisListDetails, scoreDetails, isRepeated} = this.state
+
+    const renderEmojisUi = () => {
+      if (!isRepeated) {
+        return emojisListDetails.map(eachObject => (
+          <EmojiCard
+            eachObject={eachObject}
+            emojiClickedAction={this.emojiClickedAction}
+            key={eachObject.id}
+          />
+        ))
+      }
+      return null
+    }
+
+    const renderWinOrLoseUi = () => {
+      if (!isRepeated) {
+        return null
+      }
+      return <WinOrLoseCard />
+    }
 
     return (
       <div className="bg">
         <NavBar scoreDetails={scoreDetails} />
         <div className="listContainer">
           <ul className="ulContainer">
-            {emojisListDetails.map(eachObject => (
-              <EmojiCard
-                eachObject={eachObject}
-                emojiClickedAction={this.emojiClickedAction}
-                key={eachObject.id}
-              />
-            ))}
+            {renderEmojisUi()}
+            {renderWinOrLoseUi()}
           </ul>
         </div>
       </div>

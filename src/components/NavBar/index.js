@@ -8,7 +8,20 @@ class NavBar extends Component {
     const {scoreDetails, isRepeated} = this.props
     const {scoreValue, topScoreValue} = scoreDetails
     // console.log(isRepeated)
-    const displayScore = isRepeated ? 'displayScoreDetails' : ''
+    // const displayScore = isRepeated ? 'displayScoreDetails' : ''
+
+    const renderAuthScore = () => {
+      if (!isRepeated) {
+        return (
+          <div className="scoreContainer">
+            <p className="scorePara">Score: {scoreValue}</p>
+            <p className="scorePara">Top Score: {topScoreValue}</p>
+          </div>
+        )
+      }
+      return null
+    }
+
     return (
       <nav className="navContainer">
         <div className="emojiLogoContainer">
@@ -17,12 +30,10 @@ class NavBar extends Component {
             alt="emoji logo"
             className="emojiLogoImage"
           />
-          <p className="emojiPara">Emoji Game</p>
+          <h1 className="emojiPara">Emoji Game</h1>
         </div>
-        <div className={`scoreContainer ${displayScore}`}>
-          <p className="scorePara">Score: {scoreValue}</p>
-          <p className="scorePara">Top Score: {topScoreValue}</p>
-        </div>
+
+        {renderAuthScore()}
       </nav>
     )
   }

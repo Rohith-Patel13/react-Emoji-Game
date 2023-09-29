@@ -31,6 +31,7 @@ class EmojiGame extends Component {
       emojisListDetails: emojisList,
       scoreDetails: scoreDetailsObject,
       clickedEmojisListArray: [],
+      finalScore: 0,
       isRepeated: false,
     }
   }
@@ -43,7 +44,7 @@ class EmojiGame extends Component {
     const {scoreValue, topScoreValue} = scoreDetails
     if (clickedEmojisListArray.includes(idNum)) {
       const renderScoreValue = () => {
-        console.log(topScoreValue, scoreValue)
+        // console.log(topScoreValue, scoreValue)
         if (scoreValue >= topScoreValue) {
           return scoreValue
         }
@@ -52,6 +53,7 @@ class EmojiGame extends Component {
 
       this.setState(prevState => ({
         isRepeated: true,
+        finalScore: prevState.scoreDetails.scoreValue,
         scoreDetails: {
           ...prevState.scoreDetails,
           topScoreValue: renderScoreValue(),
@@ -80,7 +82,8 @@ class EmojiGame extends Component {
   }
 
   render() {
-    const {emojisListDetails, scoreDetails, isRepeated} = this.state
+    const {emojisListDetails, scoreDetails, isRepeated, finalScore} = this.state
+    // const {scoreValue} = scoreDetails
 
     const renderEmojisUi = () => {
       if (!isRepeated) {
@@ -99,7 +102,9 @@ class EmojiGame extends Component {
       if (!isRepeated) {
         return null
       }
-      return <WinOrLoseCard playBtnEl={this.playBtnEl} />
+      return (
+        <WinOrLoseCard finalScore={finalScore} playBtnEl={this.playBtnEl} />
+      )
     }
 
     return (

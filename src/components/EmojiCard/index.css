@@ -16,3 +16,9 @@
   width: 100px;
   cursor: pointer;
 }
+
+.btnEmojiEl {
+  background-color: transparent;
+  border: 0px solid transparent;
+  cursor: pointer;
+}
